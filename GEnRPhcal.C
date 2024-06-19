@@ -363,13 +363,10 @@ Double_t pred_anaz = vertex_SBS.Z() + polana_dist;
 //?? need to figure out why we add z vertex to the distance
 
 ana_vtx.SetXYZ(pred_anax, pred_anay, pred_anaz ) ;
-rear_vtx = ana_vtx; // need to change this to get from Hcal
-
-
+rear_vtx = ana_vtx; //defining the in and out vertex as the same
      
 //intrack
 //defining the incoming track as the predicted ana vertex - vertex
-
 in_track.SetXYZ(ana_vtx.X() - vertex.X(), ana_vtx.Y() - vertex.Y(), ana_vtx.Z() - vertex.Z() );
 out_track.SetXYZ(hcal_x - ana_vtx.X(), hcal_y - ana_vtx.Y(), hcal_dist - ana_vtx.Z() );
       
@@ -379,6 +376,7 @@ out_track = out_track.Unit();
 TVector3 yaxistemp(0,1,0);
 TVector3 xaxistemp = yaxistemp.Cross(in_track).Unit();
 yaxistemp = in_track.Cross(xaxistemp).Unit();
+
 
 thsc = 180./M_PI * acos( out_track.Dot(in_track) ); //calculates the angle between the in and out tracks, in track should be the same as the z the SBS coordinate system
 phsc = 180./M_PI * TMath::ATan2( out_track.Dot(yaxistemp), out_track.Dot(xaxistemp) ); //calculates the angle between the x and y components of the out track
@@ -394,7 +392,7 @@ if( run_no >= 4000 )
       
       calc_sclose_zclose( front_vtx, rear_vtx, in_track, out_track, sclose, zclose ); //calculates the closest approach of the incoming and outgoing tracks
       //bool conetestnp = conetest( front_vtx, in_track, (thsc/57.3), zclose, polrgem_dist );
-      bool conetestnp = true; //for now, we don't have the GEMs
+      bool conetestnp = true; //?? for now, we don't have the GEMs
 
       hpolg_sclnp->Fill( sclose );  //fill the sclose histogram
       hpolg_zclnp->Fill( zclose , thsc );  //fill the zclose histogram
@@ -405,6 +403,7 @@ if( run_no >= 4000 )
     //  if( thsc >= 3.0 && sclose < 0.003  && fabs(zclose-4.72) < 0.2 && fabs(phsc)<180 ) {  
   	//hpolg_thnp_cxc->Fill ( thsc );
 
+  //defining cuts - removed the sclose cut
         if( thsc >= 6.0  && fabs(zclose-4.72) < 0.2 && fabs(phsc)<180 ) {  
   	hpolg_thnp_cxc->Fill ( thsc );
   	
