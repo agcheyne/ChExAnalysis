@@ -99,7 +99,7 @@ void GEnRPAnalysis( Int_t run_no = 9000 ) {
     C->Add("OUT_DIR/skim_genrp_9000.root");
   }
   else 
-    C->Add(Form("OUT_DIR/skim_genrp_%d_*.root", run_no));
+    C->Add(Form("OUT_DIR/skim_genrp_%d.root", run_no));
 
   TTreeReader Tl(C);
 
