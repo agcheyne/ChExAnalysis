@@ -490,11 +490,10 @@ void PlotGEnRPhcal( Int_t run_no = 9001 ) {
     tex->Draw();
 
     cpolnp->cd(2);
- 
-    hpolg_zclnp->GetXaxis()->SetTitle("zclose test[m]");
-    hpolg_zclnp->GetYaxis()->SetTitle("#theta [deg]");
-    hpolg_zclnp->GetXaxis()->SetRangeUser(3.72, 5.72 );
     hpolg_zclnp->Draw("colz");
+    hpolg_zclnp->GetXaxis()->SetTitle("zclose [m]");
+    hpolg_zclnp->GetYaxis()->SetTitle("#theta [deg]");
+
 
     cpolnp->cd(3);
     hpolg_thnp_cx->Draw("");
