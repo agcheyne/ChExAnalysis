@@ -234,7 +234,7 @@ void GEnRPhcal( Int_t run_no = 9000 ) {
 
   TLorentzVector Tp4(0,0,0,Mp);  // Proton 4-momentum (initial)
   TLorentzVector kp4(0,0,Eb,Eb); // Beam 4-momentum (initial) - only z-component is non-zero
-  TLorentzVector Qp4, kpp4, Rp4; // Q2, scattered electron, and recoil proton 4-momenta (undetermined)
+  TLorentzVector Qp4, kpp4, Rp4; // Q2, scattered electron, and recoil nucleon 4-momenta (undetermined)
 
   th_bb  *= M_PI/180.; // BigBite angle in radians
   th_sbs *= M_PI/180.; // SBS angle in radians
@@ -282,17 +282,17 @@ void GEnRPhcal( Int_t run_no = 9000 ) {
     
     kpp4.SetPxPyPzE(px,py,pz,p); // Scattered electron 4-momentum set to the BigBite track momentum
     Qp4 = kp4 - kpp4; // Q2 4-momentum = Beam 4-momentum - Scattered electron 4-momentum
-    Rp4 = Tp4 + Qp4; // Recoil proton 4-momentum = Proton 4-momentum + Q2 4-momentum
+    Rp4 = Tp4 + Qp4; // Recoil nucleon 4-momentum = nucleon 4-momentum + Q2 4-momentum
 
-    Rp4.RotateY(th_sbs); // Rotate the recoil proton 4-momentum by the SBS angle in the Hall yz-plane
+    Rp4.RotateY(th_sbs); // Rotate the recoil nucleon 4-momentum by the SBS angle in the Hall yz-plane
     
-    //angles of the recoil proton constructed from Rp4 vector
-    Double_t hcal_th = TMath::ATan(Rp4.Px()/Rp4.Pz()); // Recoil proton polar angle (theta)
-    Double_t hcal_ph = TMath::ATan(Rp4.Py()/Rp4.Pz()); // Recoil proton azimuthal angle (phi)
+    //angles of the recoil nucleon constructed from Rp4 vector
+    Double_t hcal_th = TMath::ATan(Rp4.Px()/Rp4.Pz()); // Recoil nucleon polar angle (theta)
+    Double_t hcal_ph = TMath::ATan(Rp4.Py()/Rp4.Pz()); // Recoil nucleon azimuthal angle (phi)
     
     //sbs positions
-    Double_t hcal_x = *sbs_hcal_x; // detected x-position of the recoil proton in the SBS HCAL
-    Double_t pred_x = -hcal_dist * TMath::Sin( hcal_ph ); // predicted x-position of the recoil proton at the SBS HCAL based on calculated angles
+    Double_t hcal_x = *sbs_hcal_x; // detected x-position of the recoil nucleon in the SBS HCAL
+    Double_t pred_x = -hcal_dist * TMath::Sin( hcal_ph ); // predicted x-position of the recoil nucleon at the SBS HCAL based on calculated angles
 
     Double_t hcal_y = *sbs_hcal_y; // similar for y
     Double_t pred_y   = hcal_dist * TMath::Sin(hcal_th);
@@ -323,7 +323,7 @@ void GEnRPhcal( Int_t run_no = 9000 ) {
     //some cuts!
     if( *bb_ps_e/(*bb_tr_p) < 0.1 ) continue; //if the preshower energy over momentum is less than 0.1, skip the event (the pion rejection cut)
     if( *e_kine_W2 < 0.7 ) continue;  //if the squared invariant mass of the electron-nucleon system is less than 0.7, skip the event
-    if( *e_kine_W2 > 1.4 ) continue;  //if the squared invariant mass of the electron-nucleon system is greater than 1.4, skip the event
+    if( *e_kine_W2 > 1.3 ) continue;  //if the squared invariant mass of the electron-nucleon system is greater than 1.4, skip the event
     //those last two cuts are to select the elastic peak
     
     //fill the cut histograms
@@ -350,13 +350,15 @@ void GEnRPhcal( Int_t run_no = 9000 ) {
 TVector3 vertex_SBS( vertex.Dot(SBS_xaxis), vertex.Dot(SBS_yaxis), vertex.Dot(SBS_zaxis) );
 front_vtx = vertex_SBS;
 
+
 Double_t ana_x = 99999;
 Double_t ana_y = 99999;
 Double_t thsc  = 99999;
 Double_t phsc  = 99999;
 
+if (run_no !=1000 && delta_x < -0.4) continue; //if the difference in x is greater than 0.5, skip the event (proton cut)
 
-//working out the predicted position of the recoil proton at the front of the analyzer
+//working out the predicted position of the recoil nucleon at the front of the analyzer
 Double_t pred_anax = vertex_SBS.X() - (polana_dist + vertex_SBS.Z() ) * TMath::Sin( hcal_ph );
 Double_t pred_anay = vertex_SBS.Y() + (polana_dist + vertex_SBS.Z() ) * TMath::Sin( hcal_th );
 Double_t pred_anaz = vertex_SBS.Z() + polana_dist;
@@ -404,7 +406,7 @@ if( run_no >= 4000 )
   	//hpolg_thnp_cxc->Fill ( thsc );
 
   //defining cuts - removed the sclose cut
-        if( thsc >= 6.0  && fabs(zclose-4.72) < 0.2 && fabs(phsc)<180 ) {  
+        if( thsc >= 3.0  && fabs(zclose-4.72) < 0.9 && fabs(phsc)<180 )  {  
   	hpolg_thnp_cxc->Fill ( thsc );
   	
     //if the helicity is -1, fill the following histograms

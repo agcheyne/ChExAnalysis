@@ -202,8 +202,8 @@ void PlotGEnRPhcal( Int_t run_no = 9001 ) {
     
     chcal->cd(3);
     hhcal_deltaxyc->Draw("colz");
-    hhcal_deltaxyc->GetXaxis()->SetTitle("HCal (Meas - Predicted) x[m]");
-    hhcal_deltaxyc->GetYaxis()->SetTitle("HCal (Meas - Predicted) y[m]");
+    hhcal_deltaxyc->GetXaxis()->SetTitle("HCal (Meas - Predicted) y[m]");
+    hhcal_deltaxyc->GetYaxis()->SetTitle("HCal (Meas - Predicted) x[m]");
 
     chcal->cd(4); 
     int pbmin   = 23;
@@ -463,25 +463,26 @@ void PlotGEnRPhcal( Int_t run_no = 9001 ) {
     
     cpolnp->cd(1);
     hpolg_sclnp->Draw("");
-    hpolp_sclnp->GetXaxis()->SetRangeUser(0, 0.003 );
-    hpolp_sclnp->GetXaxis()->SetTitle("sclose [m]");
-    hpolp_sclnp->GetYaxis()->SetRangeUser(0, 5000 );
+    hpolp_sclnp->GetXaxis()->SetRangeUser(0, 0.103);
+    hpolp_sclnp->GetXaxis()->SetTitle("sclose [m]*");
+    hpolp_sclnp->GetYaxis()->SetRangeUser(0, 5000);
+   
 
-    tex = new TLatex( 0.35, 0.85, "Charge Exchange" );
+    tex = new TLatex( 0.35, 0.85, "No GEMs" );
     tex->SetNDC(1);
     tex->SetTextFont(42);
     tex->SetTextColor(4);
     tex->SetTextSize(0.075);
     tex->Draw();
 
-    tex = new TLatex( 0.35, 0.75, "Polarimeter" );
+    tex = new TLatex( 0.35, 0.75, "" );
     tex->SetNDC(1);
     tex->SetTextFont(42);
     tex->SetTextColor(4);
     tex->SetTextSize(0.075);
     tex->Draw();
 
-    tex = new TLatex( 0.35, 0.65, Form("Mean sclose = %3.2f mm", 1000.*hpolg_sclnp->GetMean()) );
+    tex = new TLatex( 0.35, 0.75, Form("Mean sclose = %3.2f mm", 1000.*hpolg_sclnp->GetMean()) );
     tex->SetNDC(1);
     tex->SetTextFont(42);
     tex->SetTextColor(4);
@@ -489,9 +490,11 @@ void PlotGEnRPhcal( Int_t run_no = 9001 ) {
     tex->Draw();
 
     cpolnp->cd(2);
-    hpolg_zclnp->Draw("colz");
-    hpolg_zclnp->GetXaxis()->SetTitle("zclose [m]");
+ 
+    hpolg_zclnp->GetXaxis()->SetTitle("zclose test[m]");
     hpolg_zclnp->GetYaxis()->SetTitle("#theta [deg]");
+    hpolg_zclnp->GetXaxis()->SetRangeUser(3.72, 5.72 );
+    hpolg_zclnp->Draw("colz");
 
     cpolnp->cd(3);
     hpolg_thnp_cx->Draw("");
@@ -553,7 +556,7 @@ void PlotGEnRPhcal( Int_t run_no = 9001 ) {
     hasymcxc->SetLineColor(kBlue);
     hasymcxc->SetMarkerSize(0.5);
     hasymcxc->GetXaxis()->SetTitle("#varphi (degrees)");
-    hasymcxc->GetYaxis()->SetTitle("ChEx Asymmetry");
+    hasymcxc->GetYaxis()->SetTitle("Asymmetry");
     hasymcxc->GetYaxis()->SetRangeUser(-0.05,0.06);
 
     TF1 *fitcxc = new TF1("fitcxc", "[1]*sin(x/57.29578)-[0]*cos(x/57.29578)",-180,180);
